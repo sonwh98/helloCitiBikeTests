@@ -46,11 +46,6 @@ class ApiTests {
 }
 
 
-object QuickStartExample extends App {
-
-}
-
-
 case class Address(street: String, number: Int, postcode: Int)
 
 object Address {
