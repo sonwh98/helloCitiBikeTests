@@ -2,3 +2,12 @@ bin
 gen
 class
 \.DS_Store
+/local.properties
+/.classpath
+/.project
+/*.iml
+/*.ipr
+/*.iws
+/.idea/
+/build/
+/.gradle/
