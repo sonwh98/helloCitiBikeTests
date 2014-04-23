@@ -1,4 +1,4 @@
-package com.datayumyum.HelloCitiBike
+package com.datayumyum.helloCitiBike
 
 import argonaut._, Argonaut._
 import scalaz._, Scalaz._
@@ -7,12 +7,12 @@ import scalaz._, Scalaz._
 import org.junit.Test
 
 class ApiTests {
-
+  
   @Test
   def json() {
     val jsonStr = scala.io.Source.fromURL("http://appservices.citibikenyc.com/data2/stations.php").getLines.mkString("\n")
     println(jsonStr)
-
+    
   }
 
   @Test
@@ -20,12 +20,12 @@ class ApiTests {
     val input = """
     [
       { "name": "Mark", "age": 191 },
-      { "name": "Fred", "age": 33, "greeting": "hey ho, lets go!" },
-      { "name": "Barney", "age": 35, "address": {
-        "street": "rock street", "number": 10, "post_code": 2039
-      }}
+    { "name": "Fred", "age": 33, "greeting": "hey ho, lets go!" },
+    { "name": "Barney", "age": 35, "address": {
+      "street": "rock street", "number": 10, "post_code": 2039
+    }}
     ]
-                """
+    """
 
     // parse the string as json, attempt to decode it to a list of person,
     // otherwise just take it as an empty list.
