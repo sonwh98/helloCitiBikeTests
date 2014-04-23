@@ -1,7 +1,3 @@
-bin
-gen
-class
-\.DS_Store
 /local.properties
 /.classpath
 /.project
