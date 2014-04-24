@@ -25,6 +25,7 @@ class ApiTests {
 
 
     val json = parse( """
+                         {"results":[
          { "name": "joe",
            "address": {
              "street": "Bulevard",
@@ -41,10 +42,28 @@ class ApiTests {
                "age": 3
              }
            ]
-         }""")
+         },
+                         { "name": "Jane",
+                                   "address": {
+                                   "street": "Bulevard",
+                                   "city": "Helsinki"
+                                   },
+                                  "children": [
+                                    {
+                                     "name": "Mary",
+                                       "age": 5,
+                                       "birthdate": "2004-09-04T18:06:22Z"
+                                     },
+                                     {
+                                       "name": "Mazy",
+                                       "age": 3
+                                     }
+                                   ]
+                                 }           ]  }""")
 
-    val person = json.extract[Person]
+    val person = (json \ "results").extract[List[Person]]
     println(person)
+    println(person(1).name)
   }
 }
 
