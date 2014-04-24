@@ -7,7 +7,7 @@ import org.json4s.native.JsonMethods._
 class ApiTests {
 
   @Test
-  def json() {
+  def queryJson() {
     val jsonStr = scala.io.Source.fromURL("http://appservices.citibikenyc.com/data2/stations.php").getLines.mkString("\n")
     val parsedResult = parse(jsonStr)
     val stationIds = for {JArray(stations) <- parsedResult \\ "results"
@@ -15,6 +15,17 @@ class ApiTests {
                           JField("id", JInt(id)) <- station
     } yield id
     println(stationIds)
+  }
+
+  @Test
+  def parseStation() {
+    implicit val formats = DefaultFormats
+    val jsonStr = scala.io.Source.fromURL("http://appservices.citibikenyc.com/data2/stations.php").getLines.mkString("\n")
+    val json = parse(jsonStr)
+
+    val stations = (json \ "results").extract[List[Station]]
+    println(stations.length)
+    println(stations)
   }
 
   @Test
@@ -72,3 +83,5 @@ case class Child(name: String, age: Int, birthdate: Option[java.util.Date])
 case class Address(street: String, city: String)
 
 case class Person(name: String, address: Address, children: List[Child])
+
+case class Station(id: Int, label: String, latitude: Double, longitude: Double)
