@@ -84,4 +84,4 @@ case class Address(street: String, city: String)
 
 case class Person(name: String, address: Address, children: List[Child])
 
-case class Station(id: Int, label: String, latitude: Double, longitude: Double)
+case class Station(id: Int, label: String, latitude: Double, longitude: Double, availableBikes: Int, availableDocks: Int)
