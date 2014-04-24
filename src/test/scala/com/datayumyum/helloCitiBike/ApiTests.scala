@@ -11,10 +11,45 @@ class ApiTests {
     val jsonStr = scala.io.Source.fromURL("http://appservices.citibikenyc.com/data2/stations.php").getLines.mkString("\n")
     val parsedResult = parse(jsonStr)
     val stationIds = for {JArray(stations) <- parsedResult \\ "results"
-                   JObject(station) <- stations
-                   JField("id", JInt(id)) <- station
+                          JObject(station) <- stations
+                          JField("id", JInt(id)) <- station
     } yield id
     println(stationIds)
   }
 
+  @Test
+  def extract() {
+    import org.json4s.jackson.JsonMethods._
+
+    implicit val formats = DefaultFormats
+
+
+    val json = parse( """
+         { "name": "joe",
+           "address": {
+             "street": "Bulevard",
+             "city": "Helsinki"
+           },
+           "children": [
+             {
+               "name": "Mary",
+               "age": 5,
+               "birthdate": "2004-09-04T18:06:22Z"
+             },
+             {
+               "name": "Mazy",
+               "age": 3
+             }
+           ]
+         }""")
+
+    val person = json.extract[Person]
+    println(person)
+  }
 }
+
+case class Child(name: String, age: Int, birthdate: Option[java.util.Date])
+
+case class Address(street: String, city: String)
+
+case class Person(name: String, address: Address, children: List[Child])
