@@ -1,13 +1,14 @@
 package com.datayumyum.helloCitiBike
 
 import org.junit.Test
-import org.json4s._
-import org.json4s.native.JsonMethods._
 
-class ApiTests {
+
+class JsonParserTests {
 
   @Test
   def queryJson() {
+    import org.json4s._
+    import org.json4s.native.JsonMethods._
     val jsonStr = scala.io.Source.fromURL("http://appservices.citibikenyc.com/data2/stations.php").getLines.mkString
     ("\n")
     val parsedResult = parse(jsonStr)
@@ -20,6 +21,8 @@ class ApiTests {
 
   @Test
   def parseStation() {
+    import org.json4s._
+    import org.json4s.native.JsonMethods._
     implicit val formats = DefaultFormats
     val jsonStr = scala.io.Source.fromURL("http://appservices.citibikenyc.com/data2/stations.php").getLines.mkString
     ("\n")
@@ -33,29 +36,28 @@ class ApiTests {
   @Test
   def parseStation_ScalaUtilParsingJson {
     import scala.util.parsing.json.JSON
-    val jsonStr = scala.io.Source.fromURL("http://appservices.citibikenyc.com/data2/stations.php").getLines.mkString
-    ("\n")
-    val result: Option[Any] = JSON.parseFull(jsonStr)
-    val parsedMap: Map[String, List[Map[String, Any]]] = result.get.asInstanceOf[Map[String, List[Map[String, Any]]]]
-    val stations: List[Map[String, Any]] = parsedMap("results")
+    val jsonStr = scala.io.Source.fromURL("http://appservices.citibikenyc.com/data2/stations.php").getLines.mkString("\n")
+    val jsonAST: Option[Any] = JSON.parseFull(jsonStr)
+    val parsedMap: Map[String, List[Map[String, Any]]] = jsonAST.get.asInstanceOf[Map[String, List[Map[String, Any]]]]
+    val results: List[Map[String, Any]] = parsedMap("results")
 
-
-    val bar: List[Station] = stations.map {
-      m => Station(m("id").asInstanceOf[Double].toInt,
-        m("label").asInstanceOf[String],
-        m("latitude").asInstanceOf[Double],
-        m("longitude").asInstanceOf[Double],
-        m("availableBikes").asInstanceOf[Double].toInt,
-        m("availableDocks").asInstanceOf[Double].toInt)
+    val stations: List[Station] = results.map {
+      stationMap =>
+        Station(stationMap("id").asInstanceOf[Double].toInt,
+          stationMap("label").asInstanceOf[String],
+          stationMap("latitude").asInstanceOf[Double],
+          stationMap("longitude").asInstanceOf[Double],
+          stationMap("availableBikes").asInstanceOf[Double].toInt,
+          stationMap("availableDocks").asInstanceOf[Double].toInt)
     }
-    println(bar)
+    println(stations)
   }
 
 
   @Test
   def extract() {
     import org.json4s.jackson.JsonMethods._
-
+    import org.json4s._
     implicit val formats = DefaultFormats
 
 
